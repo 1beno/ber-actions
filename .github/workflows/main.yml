@@ -1,0 +1,36 @@
+name: Auto Commit
+
+on:
+  schedule:
+    # Menjalankan workflow setiap 4 jam
+    - cron: "0 */4 * * *"
+  workflow_dispatch: # Menambahkan trigger untuk menjalankan workflow secara manual
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Buat perubahan dummy
+      - name: Make changes
+        run: |
+          export TZ="Asia/Jakarta"  # Mengatur zona waktu ke Asia/Jakarta (WIB)
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %Z")  # Mendapatkan timestamp dalam format yang diinginkan (WIB)
+          echo "Last updated: $TIMESTAMP" > README.md  # Perbarui atau buat README.md dengan timestamp WIB
+
+      # Step 3: Commit dan Push perubahan
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name '1beno'
+          git config --global user.email 'benonygabriel57@gmail.com'
+          git add README.md
+          if git diff --cached --exit-code; then
+            echo "No changes detected, skipping commit"
+          else
+            git commit -m "Auto commit: $(date)"
+            git push
+          fi
