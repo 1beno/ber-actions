@@ -11,11 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout repository dengan Personal Access Token
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
 
-      # Step 2: Buat perubahan dummy
+      # Step 2: Buat perubahan dummy pada README.md
       - name: Make changes
         run: |
           export TZ="Asia/Jakarta"  # Mengatur zona waktu ke Asia/Jakarta (WIB)
